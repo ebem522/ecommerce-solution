@@ -2,10 +2,10 @@
 <html lang="en">
     <body>
         <h1> Here are the Listed Items</h1>
-		<p><b>Item Name, Quantity, Description, Date Added</b>
-         {% for listing in listings}
-         <li>{{listing.name}}, {{listing.quantity}}, {{listing.description}}, {{listing.date_added}}</li>
-         {% endfor %}
-      </p>
+	<p><b>Item Name, Quantity, Description, Date Added</b>
+           {% for listing in listings %}
+           <li>{{listing.name}}, {{listing.quantity}}, {{listing.description}}, {{listing.date_added}}</li>
+           {% endfor %}
+        </p>
     </body>
 </html>
