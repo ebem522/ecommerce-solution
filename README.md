@@ -3,7 +3,8 @@
 ## Table of Contents
 1. [Initial Thoughts](README.md#initial-thoughts)
 2. [Communication](README.md#communication)
-
+3. [Database](README.md#database)
+4. [Solving the Last Part](README.md#solving-the-last-part)
 
 # Initial Thoughts
 
@@ -20,4 +21,11 @@ Using Chrome Version 78.0.3904.70, navigating to 'localhost:8080' finds the conn
 
 # Communication
 
-After exploring the documentation, tutorials, and the codebase, the system is organized as follows. nginx -> <- flask -> <- postgresql. Nginx and flask communicate for the **web_network** and flask and postgresql communicate to make up the **db_network**. After searching through the files, the docker-compose.yml file turned out to have the port mapping reversed on line 24. This hasn't solved the communication issue, so I'm looking into the container logs. Looking at the Dockerfile, the container exposes port 5001. Need to make sure this is correct. 
+After exploring the documentation, tutorials, and and bridge drivers in 'docker-compose.yml', the system is organized as follows. nginx -> <- flask -> <- postgresql. Nginx and flask communicate for the **web_network** and flask and postgresql communicate to make up the **db_network**. After searching through the files, in docker-compose.yml, it turns out nginx was reversed in communicating with flask on line 24. This hasn't solved the communication issue, so I'm looking into the container logs. Looking at the Dockerfile, the container exposes port 5001. Need to make sure this is correct. This didn't connect to the local host either. The documentation states that the default port is 5000, so will change 5001 -> 5000 in app.py and flask config file to see if that fixes something I'm missing. Now it loads! However, the success page returns an internal service error so will check the container logs and dive into the backend. 
+
+# Database
+
+Postgres container utilizes Port 5432. Referring to documentation, this is the default and confirmed this is not a communication issue with the other containers. The docker log for         'ecommerce-solution_db_1' reports an error that 'items' does not exist at character 13. Also in the flask app container logs, *LINE 1: INSERT INTO items (name, quantity, description, date_added) ...* highlights a sql database error. This points to an issue in the models.py file with creating an item in the database. After  studying the app.py and its dependency on the models, database, and forms files, the quantity field is stored as a string in forms.py, but structured as an integer in models.py. Forms.py changed to define 'quantity' as an integer field. Time permitting, error handling here would be a good idea for data entry errors. The success field now loads, but the string is blank. Sidenote: the success field navigates to 'localhost,localhost:8080/success'. The repetition does not appear part of the coding challenge itself...maybe a browser issue. 
+
+#Solving the Last Part
+
