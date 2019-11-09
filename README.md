@@ -4,7 +4,7 @@
 1. [Initial Thoughts](README.md#initial-thoughts)
 2. [Communication](README.md#communication)
 3. [Database](README.md#database)
-4. [Solving the Last Part](README.md#solving-the-last-part)
+4. [Solving the Success Page](README.md#solving-the-success-page)
 
 # Initial Thoughts
 
@@ -25,7 +25,9 @@ After exploring the documentation, tutorials, and and bridge drivers in 'docker-
 
 # Database
 
-Postgres container utilizes Port 5432. Referring to documentation, this is the default and confirmed this is not a communication issue with the other containers. The docker log for         'ecommerce-solution_db_1' reports an error that 'items' does not exist at character 13. Also in the flask app container logs, *LINE 1: INSERT INTO items (name, quantity, description, date_added) ...* highlights a sql database error. This points to an issue in the models.py file with creating an item in the database. After  studying the app.py and its dependency on the models, database, and forms files, the quantity field is stored as a string in forms.py, but structured as an integer in models.py. Forms.py changed to define 'quantity' as an integer field. Time permitting, error handling here would be a good idea for data entry errors. The success field now loads, but the string is blank. Sidenote: the success field navigates to 'localhost,localhost:8080/success'. The repetition does not appear part of the coding challenge itself...maybe a browser issue. 
+Postgres container utilizes Port 5432. Referring to documentation, this is the default and confirmed this is not a communication issue with the other containers. The docker log for         'ecommerce-solution_db_1' reports an error that 'items' does not exist at character 13. Also in the flask app container logs, *LINE 1: INSERT INTO items (name, quantity, description, date_added) ...* highlights a sql database error. This points to an issue in the models.py file with creating an item in the database. After  studying the app.py and its dependency on the models, database, and forms files, the quantity field is stored as a string in forms.py, but structured as an integer in models.py. Forms.py changed to define 'quantity' as an integer field, and import from reforms. Note: entering 'seven' in the quantity leads to a server error. Time permitting, error handling here would be a good idea for data entry errors. The success field now loads, but the string is blank. Sidenote: the success field navigates to 'localhost,localhost:8080/success'. The repetition does not appear part of the coding challenge itself...maybe a browser issue. 
 
-#Solving the Last Part
+# Solving Success Page
+
+The success page shows blank comma separated fields, which indicates another database error. Looking at the success function in 'app.py' returning a string of db_session queries seems to be part of the error. Comparing with the 'add-item' function, 'success' should return a formatted version based on an html template, not just a list of strings. I've adapted the 'index.html' to 'submitted.html' and had the success function return this to show the final results. 
 
